@@ -1,5 +1,5 @@
 # Project 2
-Implementation of Dijsktra Algorithm on point and rigid robot,
+Implementation of Dijkstra Algorithm on point and rigid robot,
 
 ## Description
 - Check the feasibility of all inputs/outputs (if user gives start and goal nodes that are in the obstacle space they should be informed by a message and they should try again).
