@@ -3,75 +3,70 @@ import matplotlib.pyplot as plot
 import copy
 import math
 import time
-#Blank Map Ma
-# trix
-# BlankMap = np.zeros((200,300))
-#
-# theta = math.radians(30)
-# #Fucntion to find equation of line between two points:
-# def FindLineEqn(x1,y1,x2,y2):
-#     slope = (y2-y1)/(x2-x1)
-#     c = y1-slope*x1
-#     return slope,c
-# print(FindLineEqn(75,85,50,150))
-#
-# # Rotz = np.asarray([math.cos(theta), -math.sin(theta) , 0] ,[ math.sin(theta), math.cos(theta), 0 ], [ 0 , 0 , 1])
-# # xyz = np.asarray([a],[b],[c])
-# #Fucntion to select and store map
-#
-# def GenerateMap(name):
-#     Map = copy.deepcopy(BlankMap)
-#     if(name == "Trial"):
-#         for x in range(200):
-#             for y in range(100):
-#                 if((x>=90 and x<=110) and (y>=40 and y<=60)):
-#                     Map[100-y][x] = 1
-#                 if((((x-160)**2 + (y-50)**2) < 15**2)):
-#                     Map[100-y][x] = 1
-#         return Map
-#
-#     if(name == 'Map'):
-#         for x in range(300):
-#             for y in range(200):
-#                 if((x-225)**2 + (y-150)**2 <= 25**2):
-#                     Map[200-y][x] = 1
-#                 if(((x-150)**2/40**2 + (y-100)**2/20**2) <= 1):
-#                     Map[200-y][x] = 1
-#                 if ((y-(0.6*x))>=(-125) and (y-(-0.6*x))<=(175) and (y-(0.6*x))<=(-95) and (y-(-0.6*x))>=(145)):
-#                     Map[200-y][x] = 1
-#                 if((y-(13*x))<=(-140) and (y-(1*x))>=(100) and y <= 185 and (y-(1.4*x)>=80) ):
-#                     Map[200-y][x] = 1
-#                 if ((y-(-1.2*x))>=(210) and (y-(1.2*x))>=(30) and (y-(-1.4*x))<=(290) and (y-(-2.6*x))>=280 and y<=185):
-#                   Map[200-y][x] = 1
-#                 # Map[200-10][225] = 3
-#                 # if ((y-(-1.2*x))>=(210)):
-#                 #     Map[199-y][x] = 1
-#                 # if (y-(0.6*x))>=(-125):
-#                 #     Map[199-y][x] = 1
-#                 # if (y-(-0.6*x))>=(175):
-#                 #     Map[199-y][x] = 1
-#         return Map
-#                 # if((((x-160)**2 + (y-50)**2) < 15**2)):
-#                 #     BlankMap[100-y][x] = 1
-#
-# plot.matshow(GenerateMap("Map"))
-# plot.show()
+
+StartTime = time.time()
 
 Workspace = [300,200]
-GoalNode = [190,50]
-StartNode = [50,50]
+GoalNode = [150,130]
+StartNode = [5,5]
+Obstaclesx = []
+Obstaclesy = []
 ExploredNodes = []
 UnexploredNodes = []
-CurrentNode = [0,0]
+CurrentNode = []
 ParentNodeIndex = []
 CurrentNodeIndex = 0
 Path = []
 NodePath = []
 Cost = []
 UnexploredNodesString =[]
+plot.plot(Workspace[0],Workspace[1])
+plot.plot(StartNode[0], StartNode[1], "Dg")
+plot.plot(GoalNode[0], GoalNode[1], "Dg")
+for x in range(300):
+    for y in range(200):
+        if((x-225)**2 + (y-150)**2 <= 25**2):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+        if(((x-150)**2/40**2 + (y-100)**2/20**2) <= 1):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+        if ((y-(0.6*x))>=(-125) and (y-(-0.6*x))<=(175) and (y-(0.6*x))<=(-95) and (y-(-0.6*x))>=(145)):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+        if((y-(13*x))<=(-140) and (y-(1*x))>=(100) and y <= 185 and (y-(1.4*x)>=80) ):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+        if ((y-(-1.2*x))>=(210) and (y-(1.2*x))>=(30) and (y-(-1.4*x))<=(290) and (y-(-2.6*x))>=280 and y<=185):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+        if ((y - (1.73)*x + 135 >= 0) and (y + (0.58)*x - 96.35  <= 0) and (y - (1.73)*x - 15.54 <= 0) and (y + (0.58)*x - 84.81 >= 0)):
+            Obstaclesx.append(x)
+            Obstaclesy.append(y)
+
+plot.scatter(Obstaclesx,Obstaclesy,color = 'r')
+
+def InObstacleSpace(Node):
+    x = Node[0]
+    y = Node[1]
+    if((x-225)**2 + (y-150)**2 <= 25**2):
+        return False
+    elif(((x-150)**2/40**2 + (y-100)**2/20**2) <= 1):
+        return False
+    elif ((y-(0.6*x))>=(-125) and (y-(-0.6*x))<=(175) and (y-(0.6*x))<=(-95) and (y-(-0.6*x))>=(145)):
+        return False
+    elif((y-(13*x))<=(-140) and (y-(1*x))>=(100) and y <= 185 and (y-(1.4*x)>=80) ):
+        return False
+    elif ((y-(-1.2*x))>=(210) and (y-(1.2*x))>=(30) and (y-(-1.4*x))<=(290) and (y-(-2.6*x))>=280 and y<=185):
+        return False
+    elif ((y - (1.73)*x + 135 >= 0) and (y + (0.58)*x - 96.35  <= 0) and (y - (1.73)*x - 15.54 <= 0) and (y + (0.58)*x - 84.81 >= 0)):
+        return False
+    else:
+        return True
+
+print(InObstacleSpace([22,120]))
 def ActionMoveLeft(CurrentNode):
-    # print("CURRLEFT",CurrentNode)
-    if CurrentNode[0] > 0:
+    if CurrentNode[0] > 0 and (InObstacleSpace(CurrentNode)):
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0] = CurrentNode[0] - 1
         return NewNode
@@ -79,7 +74,7 @@ def ActionMoveLeft(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveRight(CurrentNode):
-    if CurrentNode[0] < Workspace[0] :
+    if CurrentNode[0] < Workspace[0] and (InObstacleSpace(CurrentNode)) :
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0]  = CurrentNode[0] + 1
         return NewNode
@@ -87,7 +82,7 @@ def ActionMoveRight(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveUp(CurrentNode):
-    if CurrentNode[1] < Workspace[1] :
+    if CurrentNode[1] < Workspace[1] and (InObstacleSpace(CurrentNode)) :
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[1]  = CurrentNode[1] + 1
         return NewNode
@@ -95,7 +90,7 @@ def ActionMoveUp(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveDown(CurrentNode):
-    if CurrentNode[1] > 0 :
+    if CurrentNode[1] > 0 and (InObstacleSpace(CurrentNode)) :
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[1]  = CurrentNode[1] - 1
         return NewNode
@@ -103,7 +98,7 @@ def ActionMoveDown(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveUpLeft(CurrentNode):
-    if (CurrentNode[0] > 0) and (CurrentNode[1] < Workspace[1]):
+    if (CurrentNode[0] > 0) and (CurrentNode[1] < Workspace[1]) and (InObstacleSpace(CurrentNode)):
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0],NewNode[1]  = CurrentNode[0] - 1 , CurrentNode[1]+1
         return NewNode
@@ -111,7 +106,7 @@ def ActionMoveUpLeft(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveUpRight(CurrentNode):
-    if (CurrentNode[0] < Workspace[0]) and (CurrentNode[1] < Workspace[1]):
+    if (CurrentNode[0] < Workspace[0]) and (CurrentNode[1] < Workspace[1]) and (InObstacleSpace(CurrentNode)):
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0],NewNode[1]= CurrentNode[0] + 1 , CurrentNode[1]+1
         return NewNode
@@ -119,7 +114,7 @@ def ActionMoveUpRight(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveDownLeft(CurrentNode):
-    if (CurrentNode[0] > 0) and (CurrentNode[1] > 0):
+    if (CurrentNode[0] > 0) and (CurrentNode[1] > 0) and (InObstacleSpace(CurrentNode)):
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0],NewNode[1] = CurrentNode[0] - 1 , CurrentNode[1]-1
         return NewNode
@@ -127,7 +122,7 @@ def ActionMoveDownLeft(CurrentNode):
 # print("CurrentNode",CurrentNode)
 
 def ActionMoveDownRight(CurrentNode):
-    if (CurrentNode[0] < Workspace[0]) and (CurrentNode[1] > 0):
+    if (CurrentNode[0] < Workspace[0]) and (CurrentNode[1] > 0) and (InObstacleSpace(CurrentNode)):
         NewNode = copy.deepcopy(CurrentNode)
         NewNode[0],NewNode[1] = CurrentNode[0] + 1 , CurrentNode[1]-1
         return NewNode
@@ -137,12 +132,12 @@ def ActionMoveDownRight(CurrentNode):
 def AddNode(NewNode):
     global CurrentNodeIndex
     global CurrentNode
-    Node = ','.join(str(e) for e in NewNode)
+    # Node = ','.join(str(e) for e in NewNode)
     # print("Node",Node)
-    # if not (NewNode in UnexploredNodes):
-    if not (Node in UnexploredNodesString):
+    if not (NewNode in UnexploredNodes):
+    # if not (Node in UnexploredNodesString):
         UnexploredNodes.append(NewNode)
-        UnexploredNodesString.append(Node)
+        # UnexploredNodesString.append(Node)
         ParentNodeIndex.append(CurrentNodeIndex)
 
 def GeneratePath(CurrentNode):
@@ -167,9 +162,6 @@ def Dijkstra(InitialNode):
     ParentNodeIndex.append(CurrentNodeIndex)
     Cost.append(0)
     while((CurrentNode[0] != GoalNode[0]) or (CurrentNode[1] != GoalNode[1])):
-        # global CurrentNodeIndex
-        # global CurrentNode
-
         if(ActionMoveLeft(CurrentNode) is not None):
             AddNode(ActionMoveLeft(CurrentNode))
             # UnexploredNodes.append(ActionMoveLeft(CurrentNode))
@@ -198,18 +190,19 @@ def Dijkstra(InitialNode):
         # print(CurrentNode)
         CurrentNodeIndex += 1
         CurrentNode = UnexploredNodes[CurrentNodeIndex]
+
     return CurrentNode
 
 print("Solving")
-StartTime = time.time()
 CurrentNode = Dijkstra(StartNode)
 GeneratePath(CurrentNode)
 EndTime = time.time()
 print(Path)
 print(NodePath)
 print("Solved" , EndTime - StartTime)
-
-
-
-
-
+NodePathX = [x[0] for x in NodePath]
+NodePathY = [x[1] for x in NodePath]
+print("X",NodePathX)
+print("Y",NodePathY)
+plot.plot(NodePathX,NodePathY)
+plot.show()
