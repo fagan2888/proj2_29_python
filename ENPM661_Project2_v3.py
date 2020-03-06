@@ -80,7 +80,7 @@ def GetUserInput():
     while(True):
         print("Enter the co-ordinates of starting point seprated by space:")
         StartNode = list(map(int, input().split()))
-        if  (len(StartNode)==2) and not(InObstacleSpace(StartNode)):
+        if (len(StartNode)==2) and not(InObstacleSpace(StartNode)):
             break
         else:
             print("Please provide valid starting point")
@@ -95,9 +95,7 @@ def GetUserInput():
 
 #Function to check if the Node is in  Obstacle Space
 def InObstacleSpace(Node):
-    x = Node[0]
-    y = Node[1]
-    if(Map[200-y][x]) == 1:
+    if(Map[200-Node[1]][Node[0]]) == 1:
         return True
     else:
         return False
@@ -230,8 +228,8 @@ def Dijkstra(InitialNode):
             return False
         # print("CurrentNodeIndex",CurrentNodeIndex)
         CurrentNode = UnexploredNodes[CurrentNodeIndex]
-        if(len(plotX)%500 == 0):
-            plot.scatter(plotX,plotY,'.y')
+        if(len(plotX)%1000 == 0):
+            plot.plot(plotX,plotY,'.y')
             plot.pause(0.001)
             plotX = []
             plotY = []
@@ -243,14 +241,14 @@ GetUserInput()
 StartTime = time.time()
 GenerateWorkspace()
 print("Solving")
-CurrentNode = Dijkstra(StartNode)
-if (CurrentNode):
-    GeneratePath(CurrentNode)
+GoalNode = Dijkstra(StartNode)
+if (GoalNode != False):
+    GeneratePath(GoalNode)
     NodePathX = [x[0] for x in NodePath]
     NodePathY = [x[1] for x in NodePath]
     EndTime = time.time()
     print("Solved" , EndTime - StartTime)
-    plot.plot(NodePathX,NodePathY)
+    plot.plot(NodePathX,NodePathY,'g',linewidth = 3)
     plot.show()
 else:
     EndTime = time.time()
