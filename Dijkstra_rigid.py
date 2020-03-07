@@ -6,13 +6,13 @@ import time
 
 #Variables
 Workspace = [300,200]
-GoalNode = [10,10]
-StartNode = [0,0]
+GoalNode = []
+StartNode = []
 Obstaclesx = []
 Obstaclesy = []
 ExploredNodes = []
 node = []
-CurrentNode = [1,0]
+CurrentNode = []
 ParentNodeIndex = []
 CurrentNodeIndex = 0
 Path = []
@@ -81,8 +81,8 @@ def GenerateMap():
 # Map = GenerateMap()
 def GenerateWorkspace():
     plot.plot(Workspace[0],Workspace[1])
-    plot.plot(StartNode[0], StartNode[1], "k+")
-    plot.plot(GoalNode[0], GoalNode[1], "k+")
+    plot.plot(StartNode[0], StartNode[1], "kd", markersize = '15')
+    plot.plot(GoalNode[0], GoalNode[1], "kd", markersize = '15')
     plot.scatter(Obstaclesx,Obstaclesy,color = 'b')
     # plot.show()
 
@@ -94,7 +94,7 @@ def GetUserInput():
     global clearance
 
     while(True):
-        print("Enter the co-ordinates of starting point separated by space:")
+        print("Enter the co-ordinates of starting point separated by space  (x,y) --> x y:")
         StartNode = list(map(int, input().split()))
         if (len(StartNode)==2) and not(InObstacleSpace(StartNode)):
             break
@@ -102,7 +102,7 @@ def GetUserInput():
             print("Please provide valid starting point")
 
     while(True):
-        print("Enter the co-ordinates of goal point separated by space: ")
+        print("Enter the co-ordinates of goal point separated by space  (x,y) --> x y: ")
         GoalNode = list(map(int, input().split()))
         if len(GoalNode)==2 and not(InObstacleSpace(GoalNode)):
             break
@@ -235,7 +235,6 @@ def Dijkstra(InitialNode):
             AddNode(ActionMoveDownLeft(CurrentNode))
         if(ActionMoveDownRight(CurrentNode) is not None):
             AddNode(ActionMoveDownRight(CurrentNode))
-
         plotX.append(CurrentNode[0])
         plotY.append(CurrentNode[1])
 
@@ -249,6 +248,10 @@ def Dijkstra(InitialNode):
             plot.pause(0.001)
             plotX = []
             plotY = []
+    plot.plot(plotX, plotY, '.y')
+    plot.pause(0.001)
+    plotX = []
+    plotY = []
 
     return CurrentNode
 
@@ -264,9 +267,11 @@ if (GoalNode != False):
     NodePathY = [x[1] for x in NodePath]
     EndTime = time.time()
     print("Solved" , EndTime - StartTime)
-    plot.plot(NodePathX,NodePathY,'g',linewidth = 1)
+    plot.plot(StartNode[0], StartNode[1], "kd", markersize='15')
+    plot.plot(GoalNode[0], GoalNode[1], "kd", markersize='15')
+    plot.plot(NodePathX,NodePathY,'g',linewidth = 3)
     plot.show()
 else:
     EndTime = time.time()
-    print("Solved" , EndTime - StartTime)
-    print("No Solution")
+    print("No Solution" , EndTime - StartTime)
+    # print("No Solution")

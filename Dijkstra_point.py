@@ -6,13 +6,13 @@ import time
 
 #Variables
 Workspace = [300,200]
-GoalNode = [10,10]
-StartNode = [0,0]
+GoalNode = []
+StartNode = []
 Obstaclesx = []
 Obstaclesy = []
 ExploredNodes = []
 node = []
-CurrentNode = [1,0]
+CurrentNode = []
 ParentNodeIndex = []
 CurrentNodeIndex = 0
 Path = []
@@ -78,7 +78,7 @@ def GetUserInput():
     global Clearance
 
     while(True):
-        print("Enter the co-ordinates of starting point separated by space:")
+        print("Enter the co-ordinates of starting point separated by space (x,y) --> x y:")
         StartNode = list(map(int, input().split()))
         if (len(StartNode)==2) and not(InObstacleSpace(StartNode)):
             break
@@ -86,7 +86,7 @@ def GetUserInput():
             print("Please provide valid starting point")
 
     while(True):
-        print("Enter the co-ordinates of goal point separated by space: ")
+        print("Enter the co-ordinates of goal point separated by space  (x,y) --> x y : ")
         GoalNode = list(map(int, input().split()))
         if len(GoalNode)==2 and not(InObstacleSpace(GoalNode)):
             break
@@ -222,8 +222,9 @@ def Dijkstra(InitialNode):
 
         plotX.append(CurrentNode[0])
         plotY.append(CurrentNode[1])
-
         CurrentNodeIndex += 1
+
+
         if(CurrentNodeIndex >= len(node)):
             return False
         # print("CurrentNodeIndex",CurrentNodeIndex)
@@ -233,7 +234,10 @@ def Dijkstra(InitialNode):
             plot.pause(0.001)
             plotX = []
             plotY = []
-
+    plot.plot(plotX, plotY, '.y')
+    plot.pause(0.001)
+    plotX = []
+    plotY = []
     return CurrentNode
 
 Map = GenerateMap()
@@ -248,9 +252,9 @@ if (GoalNode != False):
     NodePathY = [x[1] for x in NodePath]
     EndTime = time.time()
     print("Solved" , EndTime - StartTime)
-    plot.plot(NodePathX,NodePathY,'g',linewidth = 1)
+    plot.plot(NodePathX,NodePathY,'g',linewidth = 3)
     plot.show()
 else:
     EndTime = time.time()
-    print("Solved" , EndTime - StartTime)
-    print("No Solution")
+    print("No Solution" , EndTime - StartTime)
+    # print("No Solution")
