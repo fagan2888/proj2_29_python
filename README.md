@@ -24,7 +24,7 @@ pip install matplotlib
 - Open command prompt
 ```
 cd (directory where zip is extracted)
-cd proj2_29_python
+cd proj2_29_python-master
 python Dijkstra_point.py (for point robot)
 python Djikstra_rigid.py (for rigid robot) 
 ```
