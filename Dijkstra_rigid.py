@@ -59,6 +59,22 @@ def GenerateMap():
                 Map[200-y][x] = 1
                 Obstaclesx.append(x)
                 Obstaclesy.append(y)
+            if ((y <=  clearance + radius)):
+                Map[200-y][x] = 1
+                Obstaclesx.append(x)
+                Obstaclesy.append(y)
+            if ((x <= clearance + radius)):
+                Map[200-y][x] = 1
+                Obstaclesx.append(x)
+                Obstaclesy.append(y)
+            if ((x >= 300  - (clearance + radius)  )):
+                Map[200 - y][x] = 1
+                Obstaclesx.append(x)
+                Obstaclesy.append(y)
+            if ((200 >= y >=  200 - (clearance + radius))):
+                Map[200-y][x] = 1
+                Obstaclesx.append(x)
+                Obstaclesy.append(y)
 
     return Map
 
