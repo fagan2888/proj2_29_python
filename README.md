@@ -4,13 +4,13 @@ Implementation of Dijkstra Algorithm on point and rigid robot,
 ## For execution in windows
 ### Dependencies
 
-- Numpy
+#### Numpy
 Open the command prompt and type:
 ```
 pip install numpy
 ```
 
-- Matplotlib
+#### Matplotlib
 Open the command prompt and type:
 ```
 pip install matplotlib
